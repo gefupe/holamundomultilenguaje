@@ -14,7 +14,7 @@
       with:
         php-version: '8.3' 
     - name: Install dependencies
-      run:  php composer.phar install 
+      run: composer install 
     - name: Run tests
       run: ./vendor/bin/phpunit tests 
   deploy:
@@ -28,7 +28,7 @@
       with:
         php-version: '8.3' 
     - name: Install dependencies
-      run: php composer.phar install 
+      run: composer install 
     - name: Deploy to server
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -44,6 +44,6 @@
         # Sync the application files to the server
         rsync -avz --delete --no-t --exclude 'tests' --exclude '.git' . $USERNAME@$HOST:$DEPLOY_PATH
         # Optionally, run Composer install on the server
-        ssh -o StrictHostKeyChecking=no $USERNAME@$HOST "cd $DEPLOY_PATH && php composer.phar install --no-dev --optimize-autoloader"
+        ssh -o StrictHostKeyChecking=no $USERNAME@$HOST "cd $DEPLOY_PATH && composer install --no-dev --optimize-autoloader"
         # Restart Apache if needed
         ssh -o StrictHostKeyChecking=no $USERNAME@$HOST "sudo systemctl restart apache2"
